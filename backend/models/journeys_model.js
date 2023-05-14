@@ -5,8 +5,13 @@ const journeys = {
     return db.query("select * from journeys where id=?", [id], callback);
   },
 
-  getAll: function (callback) {
-    return db.query("select * from journeys", callback);
+  getAll: function (page, limit, callback) {
+    const offset = (page - 1) * limit;
+    return db.query(
+      "SELECT * FROM journeys LIMIT ?, ?",
+      [offset, limit],
+      callback
+    );
   },
 
   add: function (add_data, callback) {
@@ -45,4 +50,4 @@ const journeys = {
   },
 };
 
-module.exports = stations;
+module.exports = journeys;
