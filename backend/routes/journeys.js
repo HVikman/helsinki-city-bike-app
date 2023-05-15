@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const journeys = require("../models/journeys_model");
 
-router.get("/:id?", function (request, response) {
+router.get("/journey/:id?", function (request, response) {
   journeys.getById(request.params.id, function (err, dbResult) {
     if (err) {
       response.json(err);
@@ -12,15 +12,27 @@ router.get("/:id?", function (request, response) {
   });
 });
 
-router.get("/list/:page?", function (request, response) {
-  const page = parseInt(request.params.page) || 1;
-  const limit = 1000; // Set your desired limit here
+router.get("/", function (req, res) {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 10;
 
-  journeys.getAll(page, limit, function (err, dbResult) {
+  journeys.getAll(page, pageSize, function (err, dbResult) {
     if (err) {
-      response.json(err);
+      res.json(err);
     } else {
-      response.json(dbResult);
+      res.json(dbResult);
+    }
+  });
+});
+
+router.get("/totalpages", function (req, res) {
+  const pageSize = parseInt(req.query.pageSize) || 10;
+
+  journeys.getTotalPages(pageSize, function (err, totalPages) {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json({ totalPages });
     }
   });
 });

@@ -5,8 +5,34 @@ const stations = {
     return db.query("select * from stations where id=?", [id], callback);
   },
 
-  getAll: function (callback) {
-    return db.query("select * from stations", callback);
+  getTotalPages: function (pageSize, callback) {
+    const countQuery = "SELECT COUNT(*) AS total FROM stations";
+    db.query(countQuery, function (err, result) {
+      if (err) {
+        callback(err, null);
+      } else {
+        const totalStations = result[0].total;
+        const totalPages = Math.ceil(totalStations / pageSize);
+        callback(null, totalPages);
+      }
+    });
+  },
+
+  getAll: function (page, pageSize, callback) {
+    const offset = (page - 1) * pageSize;
+    const query = "SELECT * FROM stations LIMIT ? OFFSET ?";
+
+    db.query(query, [pageSize, offset], function (err, rows) {
+      if (err) {
+        callback(err, null);
+      } else {
+        const data = {
+          stations: rows,
+        };
+
+        callback(null, data);
+      }
+    });
   },
 
   add: function (add_data, callback) {

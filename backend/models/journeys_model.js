@@ -5,12 +5,35 @@ const journeys = {
     return db.query("select * from journeys where id=?", [id], callback);
   },
 
-  getAll: function (page, limit, callback) {
-    const offset = (page - 1) * limit;
-    return db.query(
-      "SELECT * FROM journeys LIMIT ?, ?",
-      [offset, limit],
-      callback
+  getTotalPages: function (pageSize, callback) {
+    db.query("select count(*) as total from journeys", function (err, result) {
+      if (err) {
+        callback(err, null);
+      } else {
+        const totalJourneys = result[0].total;
+        const totalPages = Math.ceil(totalJourneys / pageSize);
+        callback(null, totalPages);
+      }
+    });
+  },
+
+  getAll: function (page, pageSize, callback) {
+    const offset = (page - 1) * pageSize;
+
+    db.query(
+      "select * from journeys limit ? offset ?",
+      [pageSize, offset],
+      function (err, rows) {
+        if (err) {
+          callback(err, null);
+        } else {
+          const data = {
+            journeys: rows,
+          };
+
+          callback(null, data);
+        }
+      }
     );
   },
 
