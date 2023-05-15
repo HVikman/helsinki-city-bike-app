@@ -6,8 +6,7 @@ const stations = {
   },
 
   getTotalPages: function (pageSize, callback) {
-    const countQuery = "SELECT COUNT(*) AS total FROM stations";
-    db.query(countQuery, function (err, result) {
+    db.query("select count(*) as total from stations", function (err, result) {
       if (err) {
         callback(err, null);
       } else {
@@ -20,19 +19,22 @@ const stations = {
 
   getAll: function (page, pageSize, callback) {
     const offset = (page - 1) * pageSize;
-    const query = "SELECT * FROM stations LIMIT ? OFFSET ?";
 
-    db.query(query, [pageSize, offset], function (err, rows) {
-      if (err) {
-        callback(err, null);
-      } else {
-        const data = {
-          stations: rows,
-        };
+    db.query(
+      "select * from stations limit ? offset ?",
+      [pageSize, offset],
+      function (err, rows) {
+        if (err) {
+          callback(err, null);
+        } else {
+          const data = {
+            stations: rows,
+          };
 
-        callback(null, data);
+          callback(null, data);
+        }
       }
-    });
+    );
   },
 
   add: function (add_data, callback) {
