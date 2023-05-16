@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import "../styles/ListView.css";
 
 function StationList() {
   const [stations, setStations] = useState([]);
@@ -71,6 +72,7 @@ function StationList() {
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Address</th>
             <th>Station on map</th>
@@ -79,7 +81,8 @@ function StationList() {
         <tbody>
           {stations && stations.length > 0 ? (
             stations.map((station) => (
-              <tr key={station.id}>
+              <tr key={station.id} onClick={() => console.log(station.id)}>
+                <td>{station.id}</td>
                 <td>{station.name}</td>
                 <td>{station.address}</td>
                 <td>
@@ -101,23 +104,28 @@ function StationList() {
         </tbody>
       </table>
 
-      {/* Pagination */}
-      {/* Pagination */}
-      <div>
-        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+      <div className="pagination">
+        <button
+          onClick={goToPreviousPage}
+          disabled={currentPage === 1}
+          className="pagination-btn"
+        >
           Previous
         </button>
         <span>
           Current Page: {currentPage}/
           {totalPages > 0 ? totalPages : "Loading..."}
         </span>
-        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+        <button
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+          className="pagination-btn"
+        >
           Next
         </button>
       </div>
 
-      {/* Page size limit */}
-      <div>
+      <div className="size">
         <label htmlFor="pageSize">Page Size:</label>
         <select id="pageSize" value={pageSize} onChange={changePageSize}>
           <option value="10">10</option>

@@ -3,7 +3,8 @@ const router = express.Router();
 const journeys = require("../models/journeys_model");
 
 router.get("/journey/:id?", function (request, response) {
-  journeys.getById(request.params.id, function (err, dbResult) {
+  const journeyid = parseInt(request.params.id) || 1;
+  journeys.getById(journeyid, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import "../styles/ListView.css";
 
 function JourneyList() {
   const [journeys, setJourneys] = useState([]);
@@ -87,8 +88,10 @@ function JourneyList() {
                 <td>{journey.return_name}</td>
                 <td>{journey.distance} m</td>
                 <td>
-                  {Math.floor(journey.duration / 60)}:{journey.duration % 60}{" "}
-                  minutes
+                  {Math.floor(journey.duration / 60)}:
+                  {journey.duration % 60 > 10
+                    ? journey.duration % 60
+                    : "0" + (journey.duration % 60)}
                 </td>
               </tr>
             ))
@@ -100,20 +103,28 @@ function JourneyList() {
         </tbody>
       </table>
 
-      <div>
-        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+      <div className="pagination">
+        <button
+          onClick={goToPreviousPage}
+          disabled={currentPage === 1}
+          className="pagination-btn"
+        >
           Previous
         </button>
         <span>
           Current Page: {currentPage}/
           {totalPages > 0 ? totalPages : "Loading..."}
         </span>
-        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+        <button
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+          className="pagination-btn"
+        >
           Next
         </button>
       </div>
 
-      <div>
+      <div className="size">
         <label htmlFor="pageSize">Page Size:</label>
         <select id="pageSize" value={pageSize} onChange={changePageSize}>
           <option value="10">10</option>

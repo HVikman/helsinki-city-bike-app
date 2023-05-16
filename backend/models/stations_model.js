@@ -2,7 +2,7 @@ const db = require("../database");
 
 const stations = {
   getById: function (id, callback) {
-    return db.query("select * from stations where id=?", [id], callback);
+    return db.query("call GetStation(?)", [id], callback);
   },
 
   getTotalPages: function (pageSize, callback) {

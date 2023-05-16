@@ -3,7 +3,8 @@ const router = express.Router();
 const stations = require("../models/stations_model");
 
 router.get("/station/:id?", function (request, response) {
-  stations.getById(request.params.id, function (err, dbResult) {
+  const stationid = parseInt(request.params.id) || 1;
+  stations.getById(stationid, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else {
