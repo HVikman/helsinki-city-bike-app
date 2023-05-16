@@ -41,3 +41,10 @@ tbody tr:hover,
 .size {
   text-align: center;
 }
+.station-row {
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+.station-row:hover {
+  transform: scale(1.02);
+}

@@ -7,12 +7,13 @@ df2 = pd.read_csv("2021-06.csv",delimiter=",")
 df3 = pd.read_csv("2021-07.csv",delimiter=",")
 data= pd.concat([df1,df2,df3])
 
-#parse data by removing short distances and durations
-data = data[(data["Covered distance (m)"] >= 10.0) & ((data["Duration (sec.)"] >= 10))]
-
+#validate data, remove short distances and durations
+data = data[(data["Covered distance (m)"] >= 10.0) & (data["Duration (sec.)"] >= 10) & (data["Departure station id"] >=0) & (data["Return station id"] >=0)]
 
 #only keep used columns
 data = data[['Departure station id', 'Departure station name','Return station id','Return station name','Covered distance (m)','Duration (sec.)']]
+
+print(data[:5])
 
 #import stations csv file
 stations = pd.read_csv("stations.csv",delimiter=",")
@@ -21,7 +22,7 @@ stations = pd.read_csv("stations.csv",delimiter=",")
 stations.drop(["FID",'Namn','Name','Adress','Kaupunki','Stad','Operaattor','Kapasiteet'],inplace=True,axis=1)
 
 
-# Establish a connection to the MySQL database
+""" # Establish a connection to the MySQL database
 cnx = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -64,8 +65,6 @@ for _, row in stations.iterrows():
 
 
 
-
-cnx.autocommit = True
 cnx.commit()
 cursor.close()
-cnx.close() 
+cnx.close()  """

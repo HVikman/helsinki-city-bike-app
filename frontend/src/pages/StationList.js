@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "../styles/ListView.css";
+import SingleStationView from "./SingleStationView";
 
 function StationList() {
   const [stations, setStations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(20);
+  const [selectedStationId, setSelectedStationId] = useState(null);
+
+  const handleClick = (stationId) => {
+    setSelectedStationId(stationId);
+  };
+
+  const handleClose = () => {
+    setSelectedStationId(null);
+  };
 
   useEffect(() => {
     //Fetch total pages when site loads and when pagesize changes
@@ -68,6 +78,12 @@ function StationList() {
 
   return (
     <div>
+      {selectedStationId && (
+        <SingleStationView
+          stationId={selectedStationId}
+          onClose={handleClose}
+        />
+      )}
       <h1>Station List</h1>
       <table>
         <thead>
@@ -81,7 +97,11 @@ function StationList() {
         <tbody>
           {stations && stations.length > 0 ? (
             stations.map((station) => (
-              <tr key={station.id} onClick={() => console.log(station.id)}>
+              <tr
+                key={station.id}
+                onClick={() => handleClick(station.id)}
+                className="station-row"
+              >
                 <td>{station.id}</td>
                 <td>{station.name}</td>
                 <td>{station.address}</td>
