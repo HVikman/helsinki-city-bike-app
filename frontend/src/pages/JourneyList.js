@@ -64,6 +64,22 @@ function JourneyList() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowRight") {
+      // Go to the next page
+      setCurrentPage(currentPage + 1);
+    } else if (event.key === "ArrowLeft" && currentPage > 1) {
+      // Go to the previous page
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
   const changePageSize = (event) => {
     setPageSize(parseInt(event.target.value));
   };
@@ -89,7 +105,7 @@ function JourneyList() {
                 <td>{journey.distance} m</td>
                 <td>
                   {Math.floor(journey.duration / 60)}:
-                  {journey.duration % 60 > 10
+                  {journey.duration % 60 >= 10
                     ? journey.duration % 60
                     : "0" + (journey.duration % 60)}
                 </td>

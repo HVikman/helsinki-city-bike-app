@@ -3,10 +3,16 @@ const router = express.Router();
 const journeys = require("../models/journeys_model");
 
 router.get("/journey/:id?", function (request, response) {
-  const journeyid = parseInt(request.params.id) || 1;
+  const journeyid = parseInt(request.params.id);
+  if (isNaN(journeyid)) {
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
   journeys.getById(journeyid, function (err, dbResult) {
     if (err) {
       response.json(err);
+    } else if (dbResult.length === 0) {
+      response.status(404).json({ error: "not found" });
     } else {
       response.json(dbResult[0]);
     }
@@ -14,8 +20,8 @@ router.get("/journey/:id?", function (request, response) {
 });
 
 router.get("/", function (req, res) {
-  const page = parseInt(req.query.page) || 1;
-  const pageSize = parseInt(req.query.pageSize) || 10;
+  const page = parseInt(req.query.page) || 1; //if page is not specified, default to 1
+  const pageSize = parseInt(req.query.pageSize) || 10; //if pagesize is not specified, default to 10
 
   journeys.getAll(page, pageSize, function (err, dbResult) {
     if (err) {
@@ -27,7 +33,7 @@ router.get("/", function (req, res) {
 });
 
 router.get("/totalpages", function (req, res) {
-  const pageSize = parseInt(req.query.pageSize) || 10;
+  const pageSize = parseInt(req.query.pageSize) || 10; //if pagesize is not specified, default to 10
 
   journeys.getTotalPages(pageSize, function (err, totalPages) {
     if (err) {
@@ -49,7 +55,12 @@ router.post("/", function (request, response) {
 });
 
 router.delete("/:id", function (request, response) {
-  journeys.delete(request.params.id, function (err, dbResult) {
+  const journeyid = parseInt(request.params.id);
+  if (isNaN(journeyid)) {
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+  journeys.delete(journeyid, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -59,7 +70,12 @@ router.delete("/:id", function (request, response) {
 });
 
 router.put("/:id", function (request, response) {
-  journeys.update(request.params.id, request.body, function (err, dbResult) {
+  const journeyid = parseInt(request.params.id);
+  if (isNaN(journeyid)) {
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+  journeys.update(journeyid, request.body, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else {

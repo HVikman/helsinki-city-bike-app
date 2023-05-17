@@ -70,7 +70,7 @@ function SingleStationView({ stationId, onClose }) {
   }
 
   return (
-    <div className="popup-container">
+    <div className="popup-container" onClick={handleClose}>
       <div className="popup">
         <button className="close-button" onClick={handleClose}>
           X

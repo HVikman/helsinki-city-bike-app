@@ -72,6 +72,22 @@ function StationList() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowRight") {
+      // Go to the next page
+      setCurrentPage(currentPage + 1);
+    } else if (event.key === "ArrowLeft" && currentPage > 1) {
+      // Go to the previous page
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
   const changePageSize = (event) => {
     setPageSize(parseInt(event.target.value));
   };
@@ -91,7 +107,6 @@ function StationList() {
             <th>ID</th>
             <th>Name</th>
             <th>Address</th>
-            <th>Station on map</th>
           </tr>
         </thead>
         <tbody>
@@ -105,15 +120,6 @@ function StationList() {
                 <td>{station.id}</td>
                 <td>{station.name}</td>
                 <td>{station.address}</td>
-                <td>
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${station.y},${station.x}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Google Maps
-                  </a>
-                </td>
               </tr>
             ))
           ) : (

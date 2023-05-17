@@ -3,10 +3,20 @@ const router = express.Router();
 const stations = require("../models/stations_model");
 
 router.get("/station/:id?", function (request, response) {
-  const stationid = parseInt(request.params.id) || 1;
+  const stationid = parseInt(request.params.id);
+  console.log(stationid);
+
+  if (isNaN(stationid)) {
+    console.log("invalid");
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+
   stations.getById(stationid, function (err, dbResult) {
     if (err) {
       response.json(err);
+    } else if (dbResult.length === 0) {
+      response.status(404).json({ error: "not found" });
     } else {
       response.json(dbResult[0]);
     }
@@ -14,8 +24,8 @@ router.get("/station/:id?", function (request, response) {
 });
 
 router.get("/", function (req, res) {
-  const page = parseInt(req.query.page) || 1; // Current page number
-  const pageSize = parseInt(req.query.pageSize) || 10; // Number of items per page
+  const page = parseInt(req.query.page) || 1; //if page is not specified, default to 1
+  const pageSize = parseInt(req.query.pageSize) || 10; //if pagesize is not specified, default to 10
 
   stations.getAll(page, pageSize, function (err, dbResult) {
     if (err) {
@@ -27,7 +37,7 @@ router.get("/", function (req, res) {
 });
 
 router.get("/totalpages", function (req, res) {
-  const pageSize = parseInt(req.query.pageSize) || 10; // Number of items per page
+  const pageSize = parseInt(req.query.pageSize) || 10; //if pagesize is not specified, default to 10
 
   stations.getTotalPages(pageSize, function (err, totalPages) {
     if (err) {
@@ -49,7 +59,13 @@ router.post("/", function (request, response) {
 });
 
 router.delete("/:id", function (request, response) {
-  stations.delete(request.params.id, function (err, dbResult) {
+  const stationid = parseInt(request.params.id);
+  if (isNaN(stationidid)) {
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+
+  stations.delete(stationid, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -59,7 +75,13 @@ router.delete("/:id", function (request, response) {
 });
 
 router.put("/:id", function (request, response) {
-  stations.update(request.params.id, request.body, function (err, dbResult) {
+  const stationid = parseInt(request.params.id);
+  if (isNaN(stationidid)) {
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+
+  stations.update(stationid, request.body, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else {
