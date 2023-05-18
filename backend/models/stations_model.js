@@ -5,6 +5,18 @@ const stations = {
     return db.query("call GetStation(?)", [id], callback);
   },
 
+  getAverages: function (id, callback) {
+    return db.query("call averagedistances(?)", [id], callback);
+  },
+
+  getStartStations: function (id, callback) {
+    return db.query("call topstartstations(?)", [id], callback);
+  },
+
+  getEndStations: function (id, callback) {
+    return db.query("call topendstations(?)", [id], callback);
+  },
+
   getTotalPages: function (pageSize, callback) {
     db.query("select count(*) as total from stations", function (err, result) {
       if (err) {

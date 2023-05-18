@@ -15,6 +15,7 @@ function StationsTable({ stations, onRowClick }) {
               key={station.id}
               onClick={() => onRowClick(station.id)}
               className="station-row"
+              title="Click for station information"
             >
               <td>{station.id}</td>
               <td>{station.name}</td>

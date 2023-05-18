@@ -17,7 +17,7 @@ function JourneyTable({ journeys }) {
             <tr key={journey.id}>
               <td>{journey.departure_name}</td>
               <td>{journey.return_name}</td>
-              <td>{journey.distance} m</td>
+              <td>{(journey.distance / 1000).toFixed(1)}km</td>
               <td>
                 {Math.floor(journey.duration / 60)}:
                 {journey.duration % 60 >= 10

@@ -16,7 +16,8 @@
   padding: 10px;
   border-radius: 5px;
   position: relative;
-  width: 450px;
+  width: 900px;
+  display: flex;
 }
 
 .close-button {
@@ -44,4 +45,32 @@
 #map {
   height: 300px;
   border-radius: 5px;
+}
+.popup-content {
+  width: 50%;
+  padding: 0 20px;
+}
+
+.popup-divider {
+  width: 1px;
+  background-color: #d8d8d8;
+  margin: 0 10px;
+}
+
+.popup-info {
+  margin-bottom: 20px;
+}
+
+.popup-map {
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+.popup-right {
+  width: 50%;
+  padding: 0 20px;
+}
+
+.popup-right-info {
+  margin-bottom: 20px;
 }

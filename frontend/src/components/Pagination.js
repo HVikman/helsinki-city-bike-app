@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 function Pagination({
   currentPage,
@@ -8,6 +8,23 @@ function Pagination({
   pageSize,
   changePageSize,
 }) {
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowRight") {
+      // Go to the next page
+      goToNextPage();
+    } else if (event.key === "ArrowLeft" && currentPage > 1) {
+      // Go to the previous page
+      goToPreviousPage();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
   return (
     <div className="pagination">
       <button

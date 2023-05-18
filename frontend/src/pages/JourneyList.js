@@ -66,22 +66,6 @@ function JourneyList() {
     }
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "ArrowRight") {
-      // Go to the next page
-      setCurrentPage(currentPage + 1);
-    } else if (event.key === "ArrowLeft" && currentPage > 1) {
-      // Go to the previous page
-      setCurrentPage(currentPage - 1);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  });
-
   const changePageSize = (event) => {
     setPageSize(parseInt(event.target.value));
   };

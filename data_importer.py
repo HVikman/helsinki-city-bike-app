@@ -6,14 +6,16 @@ df1 = pd.read_csv("2021-05.csv",delimiter=",")
 df2 = pd.read_csv("2021-06.csv",delimiter=",")
 df3 = pd.read_csv("2021-07.csv",delimiter=",")
 data= pd.concat([df1,df2,df3])
-
+print(len(data))
 #validate data, remove short distances and durations
 data = data[(data["Covered distance (m)"] >= 10.0) & (data["Duration (sec.)"] >= 10) & (data["Departure station id"] >=0) & (data["Return station id"] >=0)]
 
 #only keep used columns
 data = data[['Departure station id', 'Departure station name','Return station id','Return station name','Covered distance (m)','Duration (sec.)']]
+print(len(data))
+data.drop_duplicates()
 
-print(data[:5])
+print(len(data))
 
 #import stations csv file
 stations = pd.read_csv("stations.csv",delimiter=",")

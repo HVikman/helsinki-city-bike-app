@@ -19,7 +19,7 @@ router.get("/station/:id?", function (request, response) {
     } else if (dbResult.length === 0) {
       response.status(404).json({ error: "not found" });
     } else {
-      response.json(dbResult[0]);
+      response.json(dbResult[0][0]);
     }
   });
 });
@@ -36,6 +36,50 @@ router.get("/averages/:id?", function (request, response) {
   }
 
   stations.getAverages(stationid, function (err, dbResult) {
+    if (err) {
+      response.json(err);
+    } else if (dbResult.length === 0) {
+      response.status(404).json({ error: "not found" });
+    } else {
+      response.json(dbResult[0][0]);
+    }
+  });
+});
+
+//top end station  endpoint
+router.get("/endstations/:id?", function (request, response) {
+  const stationid = parseInt(request.params.id);
+  console.log(stationid);
+
+  if (isNaN(stationid)) {
+    console.log("invalid");
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+
+  stations.getEndStations(stationid, function (err, dbResult) {
+    if (err) {
+      response.json(err);
+    } else if (dbResult.length === 0) {
+      response.status(404).json({ error: "not found" });
+    } else {
+      response.json(dbResult[0]);
+    }
+  });
+});
+
+//top start stations endpoint
+router.get("/startstations/:id?", function (request, response) {
+  const stationid = parseInt(request.params.id);
+  console.log(stationid);
+
+  if (isNaN(stationid)) {
+    console.log("invalid");
+    response.status(400).json({ error: "id has to be integer" });
+    return;
+  }
+
+  stations.getStartStations(stationid, function (err, dbResult) {
     if (err) {
       response.json(err);
     } else if (dbResult.length === 0) {
