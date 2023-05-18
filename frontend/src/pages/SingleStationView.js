@@ -50,7 +50,7 @@ function SingleStationView({ stationId, onClose }) {
 
   if (loading) {
     return (
-      <div className="popup-container">
+      <div className="popup-container" onClick={handleClose}>
         <ScaleLoader
           color={"#36D7B7"}
           className="spinner"
@@ -63,15 +63,18 @@ function SingleStationView({ stationId, onClose }) {
 
   if (!station) {
     return (
-      <div className="popup-container">
+      <div className="popup-container" onClick={handleClose}>
         <p>Station not found.</p>
+        <button className="close-button" onClick={handleClose}>
+          X
+        </button>
       </div>
     );
   }
 
   return (
     <div className="popup-container" onClick={handleClose}>
-      <div className="popup">
+      <div className="popup" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={handleClose}>
           X
         </button>
@@ -81,7 +84,7 @@ function SingleStationView({ stationId, onClose }) {
           Total journeys starting from this station: {station.departures_count}
         </p>
         <p>Total journeys ending at this station: {station.returns_count}</p>
-        <div id="map" style={{ height: "300px", marginBottom: "20px" }}></div>
+        <div id="map"></div>
       </div>
     </div>
   );

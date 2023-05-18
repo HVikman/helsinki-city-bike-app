@@ -41,3 +41,7 @@
   margin: 0 auto;
   text-align: center;
 }
+#map {
+  height: 300px;
+  border-radius: 5px;
+}

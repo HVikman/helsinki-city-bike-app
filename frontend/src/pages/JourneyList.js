@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "../styles/ListView.css";
+import JourneyTable from "../components/JourneyTable";
+import Pagination from "../components/Pagination";
 
 function JourneyList() {
   const [journeys, setJourneys] = useState([]);
@@ -87,68 +89,16 @@ function JourneyList() {
   return (
     <div>
       <h1>Journey List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Departure</th>
-            <th>Return</th>
-            <th>Distance</th>
-            <th>Duration</th>
-          </tr>
-        </thead>
-        <tbody>
-          {journeys && journeys.length > 0 ? (
-            journeys.map((journey) => (
-              <tr key={journey.id}>
-                <td>{journey.departure_name}</td>
-                <td>{journey.return_name}</td>
-                <td>{journey.distance} m</td>
-                <td>
-                  {Math.floor(journey.duration / 60)}:
-                  {journey.duration % 60 >= 10
-                    ? journey.duration % 60
-                    : "0" + (journey.duration % 60)}
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td>No journeys found.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <JourneyTable journeys={journeys} />
 
-      <div className="pagination">
-        <button
-          onClick={goToPreviousPage}
-          disabled={currentPage === 1}
-          className="pagination-btn"
-        >
-          Previous
-        </button>
-        <span>
-          Current Page: {currentPage}/
-          {totalPages > 0 ? totalPages : "Loading..."}
-        </span>
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages}
-          className="pagination-btn"
-        >
-          Next
-        </button>
-      </div>
-
-      <div className="size">
-        <label htmlFor="pageSize">Page Size:</label>
-        <select id="pageSize" value={pageSize} onChange={changePageSize}>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        goToPreviousPage={goToPreviousPage}
+        goToNextPage={goToNextPage}
+        pageSize={pageSize}
+        changePageSize={changePageSize}
+      />
     </div>
   );
 }
