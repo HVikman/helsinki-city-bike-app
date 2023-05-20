@@ -161,7 +161,7 @@ router.get("/totalpages/", function (req, res) {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "Inserted with id": 123456
+ *       "ID": 123456
  *     }
  *
  * @apiError BadRequest Request body invalid.
@@ -203,7 +203,7 @@ router.post("/", function (request, response) {
     if (err) {
       response.json(err);
     } else {
-      response.json({ "Inserted with id": dbResult.insertId });
+      response.json({ ID: dbResult.insertId });
     }
   });
 });
