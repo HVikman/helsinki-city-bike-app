@@ -16,7 +16,7 @@ function JourneyList() {
       setTotalPages(0);
       try {
         const response = await axios.get(
-          "http://localhost:4000/journeys/totalpages",
+          "http://localhost:4000/journeys/totalpages/",
           {
             params: {
               pageSize: pageSize,
@@ -37,7 +37,7 @@ function JourneyList() {
     //fetch list of journeys from backend
     try {
       console.log("fetching...");
-      const response = await axios.get("http://localhost:4000/journeys", {
+      const response = await axios.get("http://localhost:4000/journeys/", {
         params: {
           page: currentPage,
           pageSize: pageSize,

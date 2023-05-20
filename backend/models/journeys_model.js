@@ -39,8 +39,9 @@ const journeys = {
 
   add: function (add_data, callback) {
     return db.query(
-      "insert into journeys values(?,?,?,?,?,?)",
+      "insert into journeys values(?,?,?,?,?,?,?)",
       [
+        null,
         add_data.departure_id,
         add_data.departure_name,
         add_data.return_id,
@@ -53,12 +54,12 @@ const journeys = {
   },
 
   delete: function (id, callback) {
-    return db.query("delete from stations where id=?", [id], callback);
+    return db.query("delete from journeys where id=?", [id], callback);
   },
 
   update: function (id, update_data, callback) {
     return db.query(
-      "update stations set departure_id=?,departure_name=?,return_id=?,return_name=?, distance=?,duration=? where id=?",
+      "update journeys set departure_id=?,departure_name=?,return_id=?,return_name=?, distance=?,duration=? where id=?",
       [
         update_data.departure_id,
         update_data.departure_name,

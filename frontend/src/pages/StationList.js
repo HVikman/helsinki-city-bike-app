@@ -26,7 +26,7 @@ function StationList() {
       setTotalPages(0);
       try {
         const response = await axios.get(
-          "http://localhost:4000/stations/totalpages",
+          "http://localhost:4000/stations/totalpages/",
           {
             params: {
               pageSize: pageSize,
@@ -45,7 +45,7 @@ function StationList() {
   const fetchStations = useCallback(async () => {
     try {
       console.log("Fetching stations...");
-      const response = await axios.get("http://localhost:4000/stations", {
+      const response = await axios.get("http://localhost:4000/stations/", {
         params: {
           page: currentPage,
           pageSize: pageSize,
