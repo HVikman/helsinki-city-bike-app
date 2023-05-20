@@ -47,42 +47,31 @@ function SingleStationView({ stationId, onClose }) {
 
     const fetchAdditionalData = async () => {
       try {
-        const averagesResponse = await axios.get(
-          `http://localhost:4000/stations/averages/${stationId}`,
-          {
-            cancelToken: averagesCancelToken.token,
-          }
-        );
+        const [averagesResponse, topEndResponse, topStartResponse] =
+          await Promise.all([
+            axios.get(`http://localhost:4000/stations/averages/${stationId}`, {
+              cancelToken: averagesCancelToken.token,
+            }),
+            axios.get(
+              `http://localhost:4000/stations/endstations/${stationId}`,
+              {
+                cancelToken: topEndCancelToken.token,
+              }
+            ),
+            axios.get(
+              `http://localhost:4000/stations/startstations/${stationId}`,
+              {
+                cancelToken: topStartCancelToken.token,
+              }
+            ),
+          ]);
 
         console.log(averagesResponse.data);
-        setAverages(averagesResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
-
-      try {
-        const topEndResponse = await axios.get(
-          `http://localhost:4000/stations/endstations/${stationId}`,
-          {
-            cancelToken: topEndCancelToken.token,
-          }
-        );
-
         console.log(topEndResponse.data);
-        setTopEndStations(topEndResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
-
-      try {
-        const topStartResponse = await axios.get(
-          `http://localhost:4000/stations/startstations/${stationId}`,
-          {
-            cancelToken: topStartCancelToken.token,
-          }
-        );
-
         console.log(topStartResponse.data);
+
+        setAverages(averagesResponse.data);
+        setTopEndStations(topEndResponse.data);
         setTopStartStations(topStartResponse.data);
       } catch (error) {
         console.log(error);

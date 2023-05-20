@@ -35,6 +35,7 @@ function StationInfo({ station, averages }) {
           speedMultiplier={0.5}
         />
       )}
+      <hr />
       <div id="map"></div>
     </div>
   );

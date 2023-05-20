@@ -61,9 +61,9 @@
   margin-bottom: 20px;
 }
 
-.popup-map {
+#map {
   height: 300px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .popup-right {
@@ -73,4 +73,19 @@
 
 .popup-right-info {
   margin-bottom: 20px;
+}
+.placeholder {
+  height: 1.15rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  animation: placeholderAnimation 1s infinite ease-in-out alternate;
+}
+
+@keyframes placeholderAnimation {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
