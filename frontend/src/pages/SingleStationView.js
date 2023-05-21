@@ -129,6 +129,9 @@ function SingleStationView({ stationId, onClose, apiurl }) {
   return (
     <div className="popup-container" onClick={handleClose}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={handleClose}>
+          X
+        </button>
         <StationInfo station={station} averages={averages} />
 
         <div className="popup-divider"></div>

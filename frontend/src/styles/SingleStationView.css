@@ -89,3 +89,13 @@
     opacity: 1;
   }
 }
+@media (max-width: 768px) {
+  .popup {
+    width: 100%;
+  }
+
+  .popup-divider,
+  .popup-right {
+    display: none;
+  }
+}
