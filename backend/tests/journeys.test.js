@@ -21,7 +21,7 @@ describe("Journeys API", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.id).toBe(222222);
-      expect(response.body.departure_name).toBe("Karhupuisto");
+      expect(response.body.departure_name).toBe("Fleminginkatu");
     });
 
     test("should return a 400 Bad Request with an invalid journey ID", async () => {
@@ -29,14 +29,14 @@ describe("Journeys API", () => {
       expect(response.status).toBe(400);
     });
     test("should return a 404 Not Found with a journey id not existing", async () => {
-      const response = await request(app).get("/journeys/journey/1");
+      const response = await request(app).get("/journeys/journey/999999999");
       expect(response.status).toBe(404);
     });
   });
   describe("POST /journeys", () => {
     test("should create a new journey", async () => {
       const journeyData = {
-        departure_name: "Kaivopuistop",
+        departure_name: "Kaivopuisto",
         departure_id: 1,
         return_name: "Laivasillankatu",
         return_id: 2,

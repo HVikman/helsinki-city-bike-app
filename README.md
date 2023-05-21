@@ -1,7 +1,14 @@
 # Helsinki City Bike App
 
 This repository contains pre-assignment for Solita Dev Academy Finland 2023.
+
 API documentation is available at https://hvikman.github.io/helsinki-city-bike-app
+
+Used technologies:
+
+- React 18.2.0 for frontend
+- Node.js 18.12.1, express 4.16.1 and MySQL 8 for backend
+- Python 3 for data validation
 
 ## Table of Contents
 
@@ -14,6 +21,9 @@ API documentation is available at https://hvikman.github.io/helsinki-city-bike-a
   - [Backend](#backend)
   - [Frontend](#frontend)
   - [Importing data](#importing-data)
+- [Tests](#tests)
+  - [Frontend tests](#frontend-tests)
+  - [Backend tests](#backend-tests)
 
 ## Features
 
@@ -170,3 +180,34 @@ API documentation is available at https://hvikman.github.io/helsinki-city-bike-a
    ```
 
    The script will import the data into the Helsinki City Bike App's database.
+
+## Tests
+
+### Frontend tests
+
+I have created quite a lot of tests for the frontend. You can run tests by:
+
+1.  ```bash
+    cd frontend
+
+    ```
+
+2.  ```bash
+    npm test
+
+    ```
+
+3.  All tests should pass
+
+### Backend tests
+
+There is only few backend tests, but you can run them:
+
+1.  ```bash
+    cd backend
+    ```
+
+2.  ```bash
+    npx jest
+    ```
+3.  All tests should pass
