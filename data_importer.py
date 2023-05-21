@@ -27,9 +27,9 @@ stations.drop(["FID",'Namn','Name','Adress','Kaupunki','Stad','Operaattor','Kapa
 """ # Establish a connection to the MySQL database
 cnx = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="test",
-    database="citybike"
+    user="",
+    password="",
+    database=""
 )
 
 

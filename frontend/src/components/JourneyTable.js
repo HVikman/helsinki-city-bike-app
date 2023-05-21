@@ -1,6 +1,9 @@
 import React from "react";
 
-function JourneyTable({ journeys }) {
+function JourneyTable({ journeys, rows }) {
+  const isLoading = !journeys || journeys.length === 0;
+  const rowsToRender = isLoading ? Array(rows).fill(null) : journeys;
+
   return (
     <table>
       <thead>
@@ -12,23 +15,35 @@ function JourneyTable({ journeys }) {
         </tr>
       </thead>
       <tbody>
-        {journeys && journeys.length > 0 ? (
-          journeys.map((journey) => (
-            <tr key={journey.id}>
-              <td>{journey.departure_name}</td>
-              <td>{journey.return_name}</td>
-              <td>{(journey.distance / 1000).toFixed(1)}km</td>
-              <td>
-                {Math.floor(journey.duration / 60)}:
-                {journey.duration % 60 >= 10
-                  ? journey.duration % 60
-                  : "0" + (journey.duration % 60)}
-              </td>
-            </tr>
-          ))
-        ) : (
+        {rowsToRender.map((journey, index) => (
+          <tr key={index}>
+            {isLoading ? (
+              <>
+                <td className="placeholder">Loading...</td>
+                <td className="placeholder">Loading...</td>
+                <td className="placeholder">Loading...</td>
+                <td className="placeholder">Loading...</td>
+              </>
+            ) : (
+              <>
+                <td>{journey.departure_name}</td>
+                <td>{journey.return_name}</td>
+                <td>{(journey.distance / 1000).toFixed(1)}km</td>
+                <td>
+                  {Math.floor(journey.duration / 60)}:
+                  {journey.duration % 60 >= 10
+                    ? journey.duration % 60
+                    : "0" + (journey.duration % 60)}
+                </td>
+              </>
+            )}
+          </tr>
+        ))}
+        {!isLoading && journeys.length === 0 && (
           <tr>
-            <td>No journeys found.</td>
+            <td colSpan={4} style={{ textAlign: "center" }}>
+              No journeys found.
+            </td>
           </tr>
         )}
       </tbody>

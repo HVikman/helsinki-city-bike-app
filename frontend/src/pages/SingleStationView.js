@@ -8,7 +8,7 @@ import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import StationInfo from "../components/StationInfo";
 import TopStations from "../components/TopStations";
 
-function SingleStationView({ stationId, onClose }) {
+function SingleStationView({ stationId, onClose, apiurl }) {
   const [station, setStation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [averages, setAverages] = useState(null);
@@ -29,7 +29,7 @@ function SingleStationView({ stationId, onClose }) {
 
       try {
         const response = await axios.get(
-          `http://localhost:4000/stations/station/${stationId}`,
+          `${apiurl}/stations/station/${stationId}`,
           {
             cancelToken: stationCancelToken.token,
           }
@@ -49,21 +49,15 @@ function SingleStationView({ stationId, onClose }) {
       try {
         const [averagesResponse, topEndResponse, topStartResponse] =
           await Promise.all([
-            axios.get(`http://localhost:4000/stations/averages/${stationId}`, {
+            axios.get(`${apiurl}/stations/averages/${stationId}`, {
               cancelToken: averagesCancelToken.token,
             }),
-            axios.get(
-              `http://localhost:4000/stations/endstations/${stationId}`,
-              {
-                cancelToken: topEndCancelToken.token,
-              }
-            ),
-            axios.get(
-              `http://localhost:4000/stations/startstations/${stationId}`,
-              {
-                cancelToken: topStartCancelToken.token,
-              }
-            ),
+            axios.get(`${apiurl}/stations/endstations/${stationId}`, {
+              cancelToken: topEndCancelToken.token,
+            }),
+            axios.get(`${apiurl}/stations/startstations/${stationId}`, {
+              cancelToken: topStartCancelToken.token,
+            }),
           ]);
 
         console.log(averagesResponse.data);
@@ -86,7 +80,7 @@ function SingleStationView({ stationId, onClose }) {
       topEndCancelToken.cancel("Top End request canceled");
       topStartCancelToken.cancel("Top Start request canceled");
     };
-  }, [stationId]);
+  }, [apiurl, stationId]);
 
   const handleClose = () => {
     onClose();

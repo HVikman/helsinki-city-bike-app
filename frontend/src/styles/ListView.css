@@ -55,3 +55,18 @@ tbody tr:hover,
 .station-row:hover {
   transform: scale(1.02);
 }
+.placeholder {
+  height: 1.15rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  animation: placeholderAnimation 1s infinite ease-in-out alternate;
+}
+
+@keyframes placeholderAnimation {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

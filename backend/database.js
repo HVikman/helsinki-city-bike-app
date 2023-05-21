@@ -10,5 +10,13 @@ const connection = mysql.createPool({
   password: process.env.DB_PASS,
   database: "citybike",
 });
-
+const closeConnectionPool = () => {
+  connectionPool.end((err) => {
+    if (err) {
+      console.error("Error closing database connection pool:", err);
+    } else {
+      console.log("Database connection pool closed");
+    }
+  });
+};
 module.exports = connection;

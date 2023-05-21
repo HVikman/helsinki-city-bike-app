@@ -4,7 +4,7 @@ import "../styles/ListView.css";
 import SingleStationView from "./SingleStationView";
 import Pagination from "../components/Pagination";
 import StationsTable from "../components/StationsTable";
-
+const apiurl = "http://localhost:4000";
 function StationList() {
   const [stations, setStations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,14 +25,11 @@ function StationList() {
     const fetchTotalPages = async () => {
       setTotalPages(0);
       try {
-        const response = await axios.get(
-          "http://localhost:4000/stations/totalpages/",
-          {
-            params: {
-              pageSize: pageSize,
-            },
-          }
-        );
+        const response = await axios.get(`${apiurl}/stations/totalpages/`, {
+          params: {
+            pageSize: pageSize,
+          },
+        });
         setTotalPages(response.data.totalPages);
       } catch (error) {
         console.log(error);
@@ -45,7 +42,7 @@ function StationList() {
   const fetchStations = useCallback(async () => {
     try {
       console.log("Fetching stations...");
-      const response = await axios.get("http://localhost:4000/stations/", {
+      const response = await axios.get(`${apiurl}/stations/`, {
         params: {
           page: currentPage,
           pageSize: pageSize,
@@ -84,6 +81,7 @@ function StationList() {
         <SingleStationView
           stationId={selectedStationId}
           onClose={handleClose}
+          apiurl={apiurl}
         />
       )}
       <h1>Station List</h1>

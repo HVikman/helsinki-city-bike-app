@@ -4,6 +4,8 @@ import "../styles/ListView.css";
 import JourneyTable from "../components/JourneyTable";
 import Pagination from "../components/Pagination";
 
+const apiurl = "http://localhost:4000";
+
 function JourneyList() {
   const [journeys, setJourneys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,14 +17,11 @@ function JourneyList() {
     const fetchTotalPages = async () => {
       setTotalPages(0);
       try {
-        const response = await axios.get(
-          "http://localhost:4000/journeys/totalpages/",
-          {
-            params: {
-              pageSize: pageSize,
-            },
-          }
-        );
+        const response = await axios.get(`${apiurl}/journeys/totalpages/`, {
+          params: {
+            pageSize: pageSize,
+          },
+        });
         console.log(response.data);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -37,7 +36,7 @@ function JourneyList() {
     //fetch list of journeys from backend
     try {
       console.log("fetching...");
-      const response = await axios.get("http://localhost:4000/journeys/", {
+      const response = await axios.get(`${apiurl}/journeys/`, {
         params: {
           page: currentPage,
           pageSize: pageSize,
@@ -73,7 +72,7 @@ function JourneyList() {
   return (
     <div>
       <h1>Journey List</h1>
-      <JourneyTable journeys={journeys} />
+      <JourneyTable journeys={journeys} rows={pageSize} />
 
       <Pagination
         currentPage={currentPage}

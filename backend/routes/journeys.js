@@ -239,7 +239,7 @@ router.delete("/:id", validateId, function (request, response) {
     } else if (dbResult.affectedRows === 0) {
       response.status(404).json({ error: "No journey found with id" });
     } else {
-      response.json(dbResult);
+      response.json(dbResult.affectedRows);
     }
   });
 });
@@ -315,7 +315,7 @@ router.put("/:id", validateId, function (request, response) {
     } else if (dbResult.affectedRows === 0) {
       response.status(404).json({ error: "journey with this id doesnt exist" });
     } else {
-      response.json(dbResult);
+      response.json(dbResult.affectedRows);
     }
   });
 });
