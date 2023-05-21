@@ -4,7 +4,7 @@ import "../styles/ListView.css";
 import SingleStationView from "./SingleStationView";
 import Pagination from "../components/Pagination";
 import StationsTable from "../components/StationsTable";
-const apiurl = "http://localhost:4000";
+const apiurl = "https://henkkacitybike.azurewebsites.net";
 function StationList() {
   const [stations, setStations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);

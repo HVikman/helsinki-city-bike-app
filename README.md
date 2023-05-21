@@ -29,7 +29,7 @@ API documentation is available at https://hvikman.github.io/helsinki-city-bike-a
 - [x] List journeys
 - [x] For each journey show departure and return stations, covered distance in kilometers and duration in minutes
 - [x] Pagination
-- [ ] Ordering per column
+- [x] Ordering per column
 - [ ] Searching
 - [ ] Filtering
 
@@ -37,6 +37,7 @@ API documentation is available at https://hvikman.github.io/helsinki-city-bike-a
 
 - [x] List all the stations
 - [x] Pagination
+- [x] Ordering per column
 - [ ] Searching
 
 ### Single station view

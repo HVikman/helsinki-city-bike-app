@@ -4,7 +4,7 @@ import "../styles/ListView.css";
 import JourneyTable from "../components/JourneyTable";
 import Pagination from "../components/Pagination";
 
-const apiurl = "http://localhost:4000";
+const apiurl = "https://henkkacitybike.azurewebsites.net";
 
 function JourneyList() {
   const [journeys, setJourneys] = useState([]);
