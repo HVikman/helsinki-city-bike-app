@@ -2,6 +2,8 @@
 
 This repository contains pre-assignment for Solita Dev Academy Finland 2023.
 
+Live demo of app is available at http://citybike.henkka.one/
+
 API documentation is available at https://hvikman.github.io/helsinki-city-bike-app
 
 Used technologies:
