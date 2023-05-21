@@ -10,7 +10,7 @@ Used technologies:
 - Node.js 18.12.1, express 4.16.1 and MySQL 8 for backend
 - Python 3 for data validation
 
-Backend is running in free version of Azure App Service at : https://henkkacitybike.azurewebsites.net/
+Backend is running in free version of Azure App Service at : https://henkkacitybike.azurewebsites.net/  
 Database is Azure Database for MySQL.
 
 ## Table of Contents
