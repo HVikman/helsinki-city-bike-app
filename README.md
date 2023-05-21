@@ -131,7 +131,9 @@ API documentation is available at https://hvikman.github.io/helsinki-city-bike-a
 
    ```
 
-3. Build the frontend:
+3. Edit apiurl constant in /pages/JourneyList.js and /pages/StationList.js to your backend url.
+
+4. Build the frontend:
 
    ```bash
    npm run build
