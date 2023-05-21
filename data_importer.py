@@ -13,28 +13,28 @@ data = data[(data["Covered distance (m)"] >= 10.0) & (data["Duration (sec.)"] >=
 #only keep used columns
 data = data[['Departure station id', 'Departure station name','Return station id','Return station name','Covered distance (m)','Duration (sec.)']]
 print(len(data))
-data.drop_duplicates()
+data = data.drop_duplicates()
 
 print(len(data))
 
-#import stations csv file
+ #import stations csv file
 stations = pd.read_csv("stations.csv",delimiter=",")
 
 #delete unused columns
 stations.drop(["FID",'Namn','Name','Adress','Kaupunki','Stad','Operaattor','Kapasiteet'],inplace=True,axis=1)
 
 
-""" # Establish a connection to the MySQL database
+ # Establish a connection to the MySQL database
 cnx = mysql.connector.connect(
-    host="localhost",
+    host="",
     user="",
     password="",
-    database=""
+    database="citybike"
 )
 
 
 cursor = cnx.cursor()
-
+cnx.autocommit = False
 # Prepare the SQL statement with parameter placeholders
 query = "INSERT INTO journeys (departure_id, departure_name, return_id, return_name, distance, duration) VALUES (%s, %s, %s, %s, %s, %s)"
 
@@ -58,15 +58,15 @@ cursor.executemany(query, remaining_rows)
 cnx.commit()
 print(f"Iterated through {len(values)} rows")
     
-for _, row in stations.iterrows():
+""" for _, row in stations.iterrows():
      query = "INSERT INTO stations (id, name, address, x, y) VALUES (%s, %s,%s,%s,%s)"
      values = (row["ID"], row["Nimi"],row["Osoite"], row["x"], row["y"])
      cursor.execute(query, values) 
 
 
-
+ """
 
 
 cnx.commit()
 cursor.close()
-cnx.close()  """
+cnx.close()  

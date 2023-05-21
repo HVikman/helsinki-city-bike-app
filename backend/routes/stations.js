@@ -122,6 +122,20 @@ function validateBody(requestBody, requiredFields, requiredTypes) {
 
   return null; // request ok
 }
+function validateSortParams(sortBy, sortDirection) {
+  const validSortColumns = ["id", "name", "address"];
+  const validSortDirections = ["asc", "desc"];
+
+  if (sortBy && !validSortColumns.includes(sortBy)) {
+    return false;
+  }
+
+  if (sortDirection && !validSortDirections.includes(sortDirection)) {
+    return false;
+  }
+
+  return true;
+}
 
 //top end station  endpoint
 /**
@@ -220,44 +234,83 @@ router.get("/startstations/:id?", validateId, function (request, response) {
 });
 
 //list of stations
-
 /**
- * @api {get} /stations/?page=:page&pageSize=:pageSize List of all stations
+ * @api {get} /stations/?page=:page&pageSize=:pageSize&sortBy=:sortBy&sortDirection=:sortDirection List of all stations
  * @apiName GetStations
  * @apiGroup Stations
  *
- * @apiParam {Number} page Page of stations. 1=defaultValue
- * @apiParam {Number} pageSize Number of items per page(default=10).
-
+ * @apiParam {Number} page Page of stations. Defaults to 1 if not specified.
+ * @apiParam {Number} pageSize Number of items per page. Defaults to 10 if not specified.
+ * @apiParam {String} sortBy Sort the stations by a specific column. Defaults to "id" if not specified. (Allowed values: "id", "name", "address")
+ * @apiParam {String} sortDirection Sort direction for the sorting column. Defaults to "asc" if not specified. (Allowed values: "asc", "desc")
+ *
  * @apiSuccess {Object[]} stations Array containing specified amount of stations
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *    {
- *     {"stations":[{"id":1,"name":"Kaivopuisto","address":"Meritori 1","x":24.9502,"y":60.1554},{"id":2,"name":"Laivasillankatu","address":"Laivasillankatu 14","x":24.9565,"y":60.161},{"id":3,"name":"Kapteeninpuistikko","address":"Tehtaankatu 13","x":24.945,"y":60.1582},{"id":4,"name":"Viiskulma","address":"Fredrikinkatu 19","x":24.9418,"y":60.161},{"id":5,"name":"Sepänkatu","address":"Tehtaankatu 25","x":24.9363,"y":60.1579},{"id":6,"name":"Hietalahdentori","address":"Hietalahdenkatu 2","x":24.9296,"y":60.1622},{"id":7,"name":"Designmuseo","address":"Korkeavuorenkatu 23","x":24.946,"y":60.1631},{"id":8,"name":"Vanha kirkkopuisto","address":"Annankatu 16","x":24.9391,"y":60.1654},{"id":9,"name":"Erottajan aukio","address":"Eteläesplanadi 22","x":24.9442,"y":60.1669},{"id":10,"name":"Kasarmitori","address":"Fabianinkatu 13","x":24.9495,"y":60.165}]}
- *    }
+ *     {
+ *       "stations": [
+ *         {
+ *           "id": 1,
+ *           "name": "Kaivopuisto",
+ *           "address": "Meritori 1",
+ *           "x": 24.9502,
+ *           "y": 60.1554
+ *         },
+ *         {
+ *           "id": 2,
+ *           "name": "Laivasillankatu",
+ *           "address": "Laivasillankatu 14",
+ *           "x": 24.9565,
+ *           "y": 60.161
+ *         },
+ *         ...
+ *       ]
+ *     }
  *
- * @apiError NotFound No more stations to find.
+ * @apiError NotFound No more journeys to find.
  *
  * @apiErrorExample 404 Not Found:
  *     HTTP/1.1 404 Not Found
  *     {
  *       "error": "not found"
  *     }
+ *
+ * @apiError InvalidSortParameters Invalid sort parameters.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "Invalid sort parameters"
+ *     }
  */
+
 router.get("/", function (request, response) {
   const page = parseInt(request.query.page) || 1; //if page is not specified, default to 1
   const pageSize = parseInt(request.query.pageSize) || 10; //if pagesize is not specified, default to 10
+  const sortBy = request.query.sortBy || "id";
+  const sortDirection = request.query.sortDirection || "asc";
 
-  stations.getAll(page, pageSize, function (err, dbResult) {
-    if (err) {
-      response.json(err);
-    } else if (dbResult.stations.length === 0) {
-      response.status(404).json({ error: "not found" });
-    } else {
-      response.json(dbResult);
+  if (!validateSortParams(sortBy, sortDirection)) {
+    response.status(400).json({ error: "Invalid sort parameters" });
+    return;
+  }
+
+  stations.getAll(
+    page,
+    pageSize,
+    sortBy,
+    sortDirection,
+    function (err, dbResult) {
+      if (err) {
+        response.json(err);
+      } else if (dbResult.stations.length === 0) {
+        response.status(404).json({ error: "not found" });
+      } else {
+        response.json(dbResult);
+      }
     }
-  });
+  );
 });
 
 //amount of pages for pagination

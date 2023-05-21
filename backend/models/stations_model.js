@@ -29,11 +29,11 @@ const stations = {
     });
   },
 
-  getAll: function (page, pageSize, callback) {
+  getAll: function (page, pageSize, sortBy, sortDirection, callback) {
     const offset = (page - 1) * pageSize;
 
     db.query(
-      "select * from stations limit ? offset ?",
+      `select * from stations order by ${sortBy} ${sortDirection} limit ? offset ?`,
       [pageSize, offset],
       function (err, rows) {
         if (err) {

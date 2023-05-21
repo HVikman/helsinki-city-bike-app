@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
 import JourneyList from "./pages/JourneyList";
 import StationList from "./pages/StationList";
-
 export default function App() {
   return (
     <BrowserRouter>

@@ -11,6 +11,8 @@ function StationList() {
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [selectedStationId, setSelectedStationId] = useState(null);
+  const [sortBy, setSortBy] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const handleClick = (stationId) => {
     setSelectedStationId(stationId);
@@ -46,6 +48,8 @@ function StationList() {
         params: {
           page: currentPage,
           pageSize: pageSize,
+          sortBy: sortBy,
+          sortDirection: sortDirection,
         },
       });
       setStations(response.data.stations);
@@ -53,7 +57,7 @@ function StationList() {
     } catch (error) {
       console.log(error);
     }
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, sortBy, sortDirection]);
 
   useEffect(() => {
     fetchStations();
@@ -75,6 +79,17 @@ function StationList() {
     setPageSize(parseInt(event.target.value));
   };
 
+  const handleSort = (column) => {
+    if (sortBy === column) {
+      // If already sorted by the same column, toggle the sort direction
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // If sorting by a different column, set it as the new sort column
+      setSortBy(column);
+      setSortDirection("asc");
+    }
+  };
+
   return (
     <div className="station-table">
       {selectedStationId && (
@@ -85,7 +100,13 @@ function StationList() {
         />
       )}
       <h1>Station List</h1>
-      <StationsTable stations={stations} onRowClick={handleClick} />
+      <StationsTable
+        stations={stations}
+        onRowClick={handleClick}
+        onSort={handleSort}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+      />
 
       <Pagination
         currentPage={currentPage}

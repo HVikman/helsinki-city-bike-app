@@ -1,11 +1,32 @@
-function StationsTable({ stations, onRowClick }) {
+function StationsTable({
+  stations,
+  onRowClick,
+  onSort,
+  sortBy,
+  sortDirection,
+}) {
   return (
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Address</th>
+          <th onClick={() => onSort("id")}>
+            ID
+            {sortBy === "id" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
+          <th onClick={() => onSort("name")}>
+            Name
+            {sortBy === "name" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
+          <th onClick={() => onSort("address")}>
+            Address
+            {sortBy === "address" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
         </tr>
       </thead>
       <tbody>

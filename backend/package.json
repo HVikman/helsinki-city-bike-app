@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "apidoc": {
     "title": "Api documentation",
-    "url": "http://api.henkka.one/citybike"
+    "url": "http://henkkacitybike.azurewebsites.net"
   },
   "private": true,
   "scripts": {

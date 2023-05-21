@@ -17,14 +17,14 @@ const journeys = {
     });
   },
 
-  getAll: function (page, pageSize, callback) {
+  getAll: function (page, pageSize, sortBy, sortDirection, callback) {
     const offset = (page - 1) * pageSize;
-
     db.query(
-      "select * from journeys limit ? offset ?",
+      `select * from journeys order by ${sortBy} ${sortDirection} limit ? offset ? `,
       [pageSize, offset],
       function (err, rows) {
         if (err) {
+          console.log(err);
           callback(err, null);
         } else {
           const data = {

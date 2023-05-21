@@ -30,6 +30,27 @@ function validateBody(requestBody, requiredFields, requiredTypes) {
 
   return null; // request ok
 }
+//validate sort parameters
+function validateSortParams(sortBy, sortDirection) {
+  const validSortColumns = [
+    "id",
+    "departure_name",
+    "return_name",
+    "distance",
+    "duration",
+  ];
+  const validSortDirections = ["asc", "desc"];
+
+  if (sortBy && !validSortColumns.includes(sortBy)) {
+    return false;
+  }
+
+  if (sortDirection && !validSortDirections.includes(sortDirection)) {
+    return false;
+  }
+
+  return true;
+}
 
 //get single journey
 /**
@@ -40,10 +61,10 @@ function validateBody(requestBody, requiredFields, requiredTypes) {
  * @apiParam {Number} id Journey unique ID.
  *
  * @apiSuccess {Number} id Journey ID
- * @apiSuccess {Number} departure_id ID of departure station.
- * @apiSuccess {String} departure_name  Name of departure station.
- * @apiSuccess {Number} return_id ID of return station.
- * @apiSuccess {String} return_name  Name of return station.
+ * @apiSuccess {Number} departure_id ID of departure journey.
+ * @apiSuccess {String} departure_name  Name of departure journey.
+ * @apiSuccess {Number} return_id ID of return journey.
+ * @apiSuccess {String} return_name  Name of return journey.
  * @apiSuccess {Number} distance Distance of journey in meters.
  * @apiSuccess {Number} duration Duration of journey in seconds.
  *
@@ -79,40 +100,71 @@ router.get("/journey/:id?", validateId, function (request, response) {
 });
 //list of journeys
 /**
- * @api {get} /journeys/?page=:page&pageSize=:pageSize Request list of journeys
+ * @api {get} /journeys/?page=:page&pageSize=:pageSize&sortBy=:sortBy&sortDirection=:sortDirection List of all journeys
  * @apiName GetJourneys
  * @apiGroup Journeys
  *
- * @apiParam {Number} page Page of stations. (default is 1 if not specified)
- * @apiParam {Number} pageSize Number of items per page(default is 10 if not specified).
-
- * @apiSuccess {Object[]} journeys Array containing specified amount of journeys
+ * @apiParam {Number} page Page of journeys. Defaults to 1 if not specified.
+ * @apiParam {Number} pageSize Number of items per page. Defaults to 10 if not specified. Maximum value is 1000.
+ * @apiParam {String} sortBy Sort the journeys by a specific column. Defaults to "id" if not specified. Valid columns are "id", "departure_name", "return_name", "distance", and "duration".
+ * @apiParam {String} sortDirection Sort direction for the sorting column. Defaults to "asc" if not specified. Valid values are "asc" for ascending and "desc" for descending.
+ *
+ * @apiSuccess {Object[]} journeys Array containing specified amount of journeys.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *    {"journeys":[{"id":114403,"departure_id":94,"departure_name":"Laajalahden aukio","return_id":100,"return_name":"Teljäntie","distance":2043,"duration":500},{"id":114404,"departure_id":82,"departure_name":"Töölöntulli","return_id":113,"return_name":"Pasilan asema","distance":1870,"duration":611},{"id":114405,"departure_id":123,"departure_name":"Näkinsilta","return_id":121,"return_name":"Vilhonvuorenkatu","distance":1025,"duration":399},{"id":114406,"departure_id":4,"departure_name":"Viiskulma","return_id":65,"return_name":"Hernesaarenranta","distance":4318,"duration":2009},{"id":114407,"departure_id":4,"departure_name":"Viiskulma","return_id":65,"return_name":"Hernesaarenranta","distance":1400,"duration":350},{"id":114408,"departure_id":292,"departure_name":"Koskelan varikko","return_id":133,"return_name":"Paavalinpuisto","distance":1713,"duration":366},{"id":114409,"departure_id":34,"departure_name":"Kansallismuseo","return_id":81,"return_name":"Stenbäckinkatu","distance":2550,"duration":1377},{"id":114410,"departure_id":240,"departure_name":"Viikin normaalikoulu","return_id":281,"return_name":"Puotila (M)","distance":5366,"duration":1304},{"id":114411,"departure_id":116,"departure_name":"Linnanmäki","return_id":117,"return_name":"Brahen puistikko","distance":3344,"duration":1393},{"id":114412,"departure_id":116,"departure_name":"Linnanmäki","return_id":145,"return_name":"Pohjolankatu","distance":3248,"duration":935}]}
+ *      {
+ *      "journeys":[
+ *      {"id":1,"departure_id":94,"departure_name":"Laajalahden aukio","return_id":100,"return_name":"Teljäntie","distance":2043,"duration":500},
+ *      {"id":2,"departure_id":82,"departure_name":"Töölöntulli","return_id":113,"return_name":"Pasilan asema","distance":1870,"duration":611}]
+ *     }
  *
  * @apiError NotFound No more journeys to find.
  *
- * @apiErrorExample 404 Not Found:
+ * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
  *       "error": "not found"
  *     }
+ *
+ * @apiError InvalidSortParameters Invalid sort parameters.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "Invalid sort parameters"
+ *     }
  */
-router.get("/", function (req, res) {
-  const page = parseInt(req.query.page) || 1; //if page is not specified, default to 1
-  const pageSize = parseInt(req.query.pageSize) || 10; //if pagesize is not specified, default to 10
+router.get("/", function (request, response) {
+  const page = parseInt(request.query.page) || 1; //if page is not specified, default to 1
+  const pageSize = parseInt(request.query.pageSize) || 10; //if pagesize is not specified, default to 10
+  const sortBy = request.query.sortBy || "id";
+  const sortDirection = request.query.sortDirection || "asc";
 
-  journeys.getAll(page, pageSize, function (err, dbResult) {
-    if (err) {
-      res.json(err);
-    } else if (dbResult.journeys.length === 0) {
-      res.status(404).json({ error: "not found" });
-    } else {
-      res.json(dbResult);
+  if (!validateSortParams(sortBy, sortDirection)) {
+    response.status(400).json({ error: "Invalid sort parameters" });
+    return;
+  }
+
+  if (pageSize > 1000) {
+    pageSize = 10;
+  }
+  journeys.getAll(
+    page,
+    pageSize,
+    sortBy,
+    sortDirection,
+    function (err, dbResult) {
+      if (err) {
+        console.log(err);
+        response.json(err);
+      } else if (dbResult.journeys.length === 0) {
+        response.status(404).json({ error: "not found" });
+      } else {
+        response.json(dbResult);
+      }
     }
-  });
+  );
 });
 
 //total pages for pagination
@@ -131,14 +183,14 @@ router.get("/", function (req, res) {
  *     {"totalPages":46}
  *    }
  */
-router.get("/totalpages/", function (req, res) {
-  const pageSize = parseInt(req.query.pageSize) || 10; //if pagesize is not specified, default to 10
+router.get("/totalpages/", function (request, response) {
+  const pageSize = parseInt(request.query.pageSize) || 10; //if pagesize is not specified, default to 10
 
   journeys.getTotalPages(pageSize, function (err, totalPages) {
     if (err) {
-      res.json(err);
+      response.json(err);
     } else {
-      res.json({ totalPages });
+      response.json({ totalPages });
     }
   });
 });
@@ -149,10 +201,10 @@ router.get("/totalpages/", function (req, res) {
  * @apiName CreateJourney
  * @apiGroup Journeys
  *
- * @apiBody {Number} departure_id ID of the departure station.
- * @apiBody {String} departure_name Name of the departure station.
- * @apiBody {Number} return_id ID of the return station.
- * @apiBody {String} return_name Name of the return station.
+ * @apiBody {Number} departure_id ID of the departure journey.
+ * @apiBody {String} departure_name Name of the departure journey.
+ * @apiBody {Number} return_id ID of the return journey.
+ * @apiBody {String} return_name Name of the return journey.
  * @apiBody {Number} duration Duration of the journey in seconds.
  * @apiBody {Number} distance Distance of the journey in meters.
  *
@@ -251,10 +303,10 @@ router.delete("/:id", validateId, function (request, response) {
  * @apiGroup Journeys
  *
  * @apiParam {Number} id ID of the journey to update.
- * @apiBody {Number} departure_id Updated ID of the departure station.
- * @apiBody {String} departure_name Updated name of the departure station.
- * @apiBody {Number} return_id Updated ID of the return station.
- * @apiBody {String} return_name Updated name of the return station.
+ * @apiBody {Number} departure_id Updated ID of the departure journey.
+ * @apiBody {String} departure_name Updated name of the departure journey.
+ * @apiBody {Number} return_id Updated ID of the return journey.
+ * @apiBody {String} return_name Updated name of the return journey.
  * @apiBody {Number} duration Updated duration of the journey in seconds.
  * @apiBody {Number} distance Updated distance of the journey in meters.
  *

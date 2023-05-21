@@ -11,6 +11,8 @@ function JourneyList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(20);
+  const [sortBy, setSortBy] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   useEffect(() => {
     //fetch amount of pages when site loads and when pagesize changes
@@ -40,6 +42,8 @@ function JourneyList() {
         params: {
           page: currentPage,
           pageSize: pageSize,
+          sortBy: sortBy,
+          sortDirection: sortDirection,
         },
       });
       console.log(response.data);
@@ -47,7 +51,7 @@ function JourneyList() {
     } catch (error) {
       console.log(error);
     }
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, sortBy, sortDirection]);
 
   useEffect(() => {
     fetchJourneys();
@@ -69,10 +73,28 @@ function JourneyList() {
     setPageSize(parseInt(event.target.value));
   };
 
+  const handleSort = (column) => {
+    // Update sort column and direction
+    if (sortBy === column) {
+      // If already sorted by the same column, toggle the direction
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // If sorting a different column, set it as the new sort column with the default direction
+      setSortBy(column);
+      setSortDirection("asc");
+    }
+  };
+
   return (
     <div>
       <h1>Journey List</h1>
-      <JourneyTable journeys={journeys} rows={pageSize} />
+      <JourneyTable
+        journeys={journeys}
+        rows={pageSize}
+        onSort={handleSort}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+      />
 
       <Pagination
         currentPage={currentPage}

@@ -1,6 +1,6 @@
 import React from "react";
 
-function JourneyTable({ journeys, rows }) {
+function JourneyTable({ journeys, rows, onSort, sortBy, sortDirection }) {
   const isLoading = !journeys || journeys.length === 0;
   const rowsToRender = isLoading ? Array(rows).fill(null) : journeys;
 
@@ -8,10 +8,36 @@ function JourneyTable({ journeys, rows }) {
     <table>
       <thead>
         <tr>
-          <th>Departure</th>
-          <th>Return</th>
-          <th>Distance</th>
-          <th>Duration</th>
+          <th
+            onClick={() => onSort("departure_name")}
+            title="Click to sort column"
+          >
+            Departure Name
+            {sortBy === "departure_name" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
+          <th
+            onClick={() => onSort("return_name")}
+            title="Click to sort column"
+          >
+            Return Name
+            {sortBy === "return_name" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
+          <th onClick={() => onSort("distance")} title="Click to sort column">
+            Distance
+            {sortBy === "distance" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
+          <th onClick={() => onSort("duration")} title="Click to sort column">
+            Duration
+            {sortBy === "duration" && (
+              <span>{sortDirection === "asc" ? " ▲" : " ▼"}</span>
+            )}
+          </th>
         </tr>
       </thead>
       <tbody>

@@ -24,7 +24,8 @@ tbody tr:nth-child(even) {
 }
 
 tbody tr:hover,
-.pagination-btn:hover {
+.pagination-btn:hover,
+th:hover {
   background-color: #e6e6e6;
 }
 .pagination-btn {
@@ -48,12 +49,16 @@ tbody tr:hover,
   text-align: center;
   margin-top: 5px;
 }
-.station-row {
+.station-row,
+th {
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
 }
 .station-row:hover {
   transform: scale(1.02);
+}
+th:hover {
+  transform: scale(1.1);
 }
 .placeholder {
   height: 1.15rem;

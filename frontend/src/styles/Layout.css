@@ -4,6 +4,7 @@
   align-items: center;
   background-color: #f2f2f2;
   padding: 10px;
+  border: 1px solid #ccc;
 }
 
 nav ul {
@@ -15,8 +16,8 @@ nav ul {
 nav ul li {
   display: inline-block;
   margin-right: 10px;
-  border: 1px solid #333; /* Add border */
-  border-radius: 4px; /* Add border radius */
+  border: 1px solid #333;
+  border-radius: 4px;
   background-color: #d8d8d8;
 }
 
@@ -25,12 +26,12 @@ nav ul li a {
   color: #333;
   font-weight: bold;
   font-size: 16px;
-  padding: 8px 12px; /* Add padding for spacing */
+  padding: 8px 12px;
 }
 
 nav ul li a:hover {
   color: #555;
   background-color: #e6e6e6;
-  border: 1px solid #333; /* Add border */
-  border-radius: 4px; /* Add border radius */
+  border: 1px solid #333;
+  border-radius: 4px;
 }
